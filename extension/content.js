@@ -1,4 +1,4 @@
-const FILTER_ENDPOINT = 'https://your.server/api/filter';
+const FILTER_ENDPOINT = 'http://localhost:3000/check';
 
 function extractYouTubeID(url) {
 	const patterns = [
@@ -42,15 +42,13 @@ async function checkAndBlock() {
 		  Checking video content . . .
         </div>`;
 
-			// const resp = await fetch(FILTER_ENDPOINT, {
-			// 	method: 'POST',
-			// 	headers: { 'Content-Type': 'application/json' },
-			// 	body: JSON.stringify({ url: location.href })
-			// });
-			// if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-			// const { block } = await resp.json();
-			await new Promise(resolve => setTimeout(resolve, 5000));
-			const block = Math.random() < 0.5;
+			const resp = await fetch(FILTER_ENDPOINT, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({ url: location.href })
+			});
+			if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+			const { block } = await resp.json();
 			if (block) {
 				// replace page contents with a “blocked” message
 				document.documentElement.innerHTML = `
